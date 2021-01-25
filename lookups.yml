@@ -1,0 +1,35 @@
+---
+- name: playbook to demo lookups
+  hosts:
+    - localhost
+  vars:
+    choices:
+      - Blue pill
+      - Red pill
+      - Do nothing
+  tasks:
+    - name: Print content of a file
+      debug:
+        msg: "{{ lookup('file', 'files/somefile.txt') }}"
+    - name: print out content of two files
+      debug:
+        msg: "{{ item }}"
+      with_file:
+        - somefile.txt
+        - someotherfile.txt
+    - name: print content of a file found first
+      debug: 
+        msg: "{{ lookup ('file', lookup('first_found', 'files/somefile.txt', 'files/someotherfile.txt', '/etc/hosts')) }}"
+    - name: read in a processed J2 template
+      debug:
+        msg: "{{ lookup('template', 'j2/sample.j2') }}"
+    - name: choose a random number from a list
+      debug:
+        msg: "{{ item }}"
+      with_random_choice: "{{ choices }}"
+    - name: grab content from a URL
+      debug:
+        msg: "{{ lookup('url', 'https://www.w3.org/TR/PNG/iso_8859-1.txt') }}"
+
+
+    
