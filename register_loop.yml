@@ -1,0 +1,20 @@
+---
+- name: Register a var  with a loop
+  hosts: localhost
+  tasks:
+    - name: run some commands
+      command: "{{ item }}"
+      loop:
+        - echo "Message 1"
+        - echo "Message 2"
+        - echo "Message 3"
+      register: output
+
+    - name: print output
+      debug:
+        msg: "{{ output }}"
+
+    - name: print out the data from each individual instance of the original task
+      debug:
+        msg: "{{ item }}"
+      loop: "{{ output.results }}"

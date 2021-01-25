@@ -1,0 +1,25 @@
+---
+- name: Extended loop vars
+  hosts:
+    - localhost
+  tasks:
+    - name: print extended loop vars
+      debug:
+        msg: |
+          "Position {{ ansible_loop.index }} is {{ item }}".
+           The loop is overall {{ ansible_loop.length }} items long.
+           The name used for the loop var is {{ ansible_loop_var }}.
+           The number of iterations left is {{ ansible_loop.revindex }}
+      loop:
+        - apple
+        - orange
+        - pear
+        - lemon
+        - melon
+        - strawberry
+        - 1
+        - 2
+        - 3
+      loop_control:
+        extended: true
+      
