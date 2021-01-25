@@ -1,0 +1,50 @@
+---
+- name: Anchors demo
+  hosts: 
+    - localhost
+  vars:
+    fruits: &types
+      citrus:
+        - orange
+        - grapefruit
+        - lime
+      berries:
+        - strawberry
+        - raspberry
+        - blackberry
+        - blueberry
+      melons:
+        - watermelon
+        - rockmelon
+        - honeydew
+  tasks:
+    - name: Print fruits
+      debug:
+        var: fruits
+      vars:
+        fruits:
+          <<: *types
+          stone_fruits:
+            - nectarine
+            - apricot
+            - peach
+
+- name: Alias used with anchor
+  hosts:      
+    - localhost
+  vars:
+    fruits:
+      <<: *types
+  tasks:
+    - name: Print fruits - 2
+      debug:
+        var: fruits
+      vars:
+        fruits:
+          <<: *types
+          stone_fruits:
+            - nectarine
+            - apricot
+            - peach
+          melons:
+            - rockmelon
