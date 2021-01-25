@@ -1,0 +1,33 @@
+---
+- name: jsonquery playbook
+  hosts:
+    - localhost
+  vars:
+    api: https://jsonplaceholder.typicode.com/posts
+    find_title: "json[?id==`{{ id }}`].title"
+  vars_prompt:
+    name: id
+    prompt: Enter the id of the post title to print
+    unsafe: true
+
+  tasks:
+    - name: Grab the json object from the api and store it in posts
+      uri:
+        url: "{{ api }}"
+        method: GET
+        validate_certs: false
+        return_content: false
+      register: posts
+
+    - name: Print the posts
+      debug:
+        msg: "{{ posts }}"
+    
+    - name: print out all of the title fields
+      debug:
+        msg: "{{ item }}"
+      loop: "{{ posts | json_query('json[*].title') }}"
+
+    - name: use the jsonquery to extract the specific piece of data we want from the returned object
+      debug:
+        msg: "The title of the post with the id {{ id }} is {{ posts | json_query(find_title) | first }}"
