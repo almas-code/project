@@ -1,0 +1,12 @@
+---
+- name: Troubleshooting play
+  hosts: 
+    - all
+  tasks:
+    - name: Debug tasks that runs at all verbosity levels
+      debug:
+        msg: "This task has verbosity 0"
+    - name: Debug task at verbosity level 2
+      debug:
+        msg: "Verbosity 2"
+        verbosity: 2
