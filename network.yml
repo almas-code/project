@@ -1,0 +1,34 @@
+---
+  - name: test network devices
+    hosts: network
+    gather_subset: config
+    tasks:
+      - name: print device config
+        debug:
+          msg: "{{ ansible_facts['net_config'] }}"
+
+      - name: use the ping module
+        ping:
+          data: "NotPong"
+
+      - name: use the vyos_ping module
+        vyos_ping:
+          dest: "{{ item }}"
+          count: 1
+        loop:
+          - servera
+          - serverb
+          - serverc
+          - serverd
+
+      - name: backup the configuration
+        vyos_config:
+          backup: true
+          backup_options:
+            dir_path: "{{ playbook_dir }}/backup"
+            filename: vyos-config-latest
+
+      - name: Run a command
+        vyos_command:
+          commands:
+            - show version
